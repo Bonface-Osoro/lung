@@ -1,3 +1,22 @@
+Metadata-Version: 2.1
+Name: lung
+Version: 0.1.dev2+g979642b93.d20251001
+Summary: Local-US Neighborhood Geographies of Pulmonary Embolism (lung)
+Home-page: https://github.com/Bonface-Osoro/lung.git
+Author: Bonface Osoro
+Author-email: bonfaceosoro@gmail.com
+License: MIT License
+Keywords: US,pulmonary,patient,outcomes
+Classifier: Development Status :: 1 - Planning
+Classifier: Intended Audience :: Medics
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Scientific/Healthcare :: Geospatial data science
+Classifier: Topic :: Utilities
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
 # Local-US Neighborhood Geographies of Pulmonary Embolism (lung)
 Lung is a county-level exploratory data project focused on understanding pulmonary embolism (PE) mortality trends across the United States from 2005 to 2022. We use the Center for Diseases and Control (CDC) data By combined with spatial analysis and local indicators such as air pollution, socioeconomic conditions, and walkability and understand the patterns of the conditions. Through this project, we aim to uncover geographic patterns and community level factors that shape disparities in PE outcomes. **lung** provides an open framework for integrating diverse datasets, visualizing risk landscapes, and generating insights to inform both public health research and policy interventions.
 
