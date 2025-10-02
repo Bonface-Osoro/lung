@@ -11,7 +11,7 @@ To this end, we seek to answer the following research questions
 
 Methodology
 ==============
-Geospatial modeling method (see `Figure 1`). 
+Geospatial modeling method applied in the study(see `Figure 1`). 
 
 #### Figure 1 Proposed Method.
 <p align="center">
