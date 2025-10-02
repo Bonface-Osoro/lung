@@ -42,7 +42,7 @@ setup(
         'Topic :: Utilities',
     ],
     keywords=[
-        'US','pulmonary', 'patient', 'outcomes'
+        'US','pulmonary', 'patient', 'outcomes', 'embolism'
     ],
     setup_requires=[
         'setuptools_scm'
