@@ -9,7 +9,8 @@ folder <- dirname(rstudioapi::getSourceEditorContext()$path)
 ############
 ## 1. SEX ##
 ############
-sex <- read.csv(file.path(folder, '..', 'results', 'sex_cdc_pulmonary_data.csv'))
+sex <- read.csv(file.path(folder, '..', 'results', 'processed', 
+                          'sex_cdc_pulmonary_data.csv'))
 
 df1 = sex %>%
   group_by(sex, fileyear) %>%
@@ -48,7 +49,8 @@ sex_plot <- ggplot(df1, aes(fileyear, sum, color = sex)) +
 ############
 ## 2. AGE ##
 ############
-age <- read.csv(file.path(folder, '..', 'results', 'age_cdc_pulmonary_data.csv'))
+age <- read.csv(file.path(folder, '..', 'results', 'processed', 
+                          'age_cdc_pulmonary_data.csv'))
 
 df2 = age %>%
   group_by(age_cat, fileyear) %>%
@@ -91,7 +93,8 @@ age_plot <- ggplot(df2, aes(fileyear, sum, color = age_cat)) +
 #############
 ## 3. RACE ##
 #############
-race <- read.csv(file.path(folder, '..', 'results', 'race_cdc_pulmonary_data.csv'))
+race <- read.csv(file.path(folder, '..', 'results', 'processed', 
+                           'race_cdc_pulmonary_data.csv'))
 
 df3 = race %>%
   group_by(race_recode3, fileyear) %>%

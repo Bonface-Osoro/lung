@@ -1,12 +1,12 @@
 Metadata-Version: 2.1
 Name: lung
-Version: 0.1.dev2+g979642b93.d20251001
+Version: 0.1.dev7+g20f523300.d20251017
 Summary: Local-US Neighborhood Geographies of Pulmonary Embolism (lung)
 Home-page: https://github.com/Bonface-Osoro/lung.git
 Author: Bonface Osoro
 Author-email: bonfaceosoro@gmail.com
 License: MIT License
-Keywords: US,pulmonary,patient,outcomes
+Keywords: US,pulmonary,patient,outcomes,embolism
 Classifier: Development Status :: 1 - Planning
 Classifier: Intended Audience :: Medics
 Classifier: License :: OSI Approved :: MIT License
@@ -30,7 +30,7 @@ To this end, we seek to answer the following research questions
 
 Methodology
 ==============
-Geospatial modeling method (see `Figure 1`). 
+Geospatial modeling method applied in the study(see `Figure 1`). 
 
 #### Figure 1 Proposed Method.
 <p align="center">
