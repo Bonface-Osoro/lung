@@ -20,7 +20,7 @@ Geospatial modeling method applied in the study(see `Figure 1`).
 
 Results
 =======
-`Figure 2` shows the exploratory results.
+`Figure 2` shows geographically weighted regression results.
 #### Figure 2 Pulmonary embolism mortality count regression results across US counties.
 <p align="center">
   <img src="/docs/significant_counties.png" />
@@ -37,7 +37,3 @@ authorities for providing the data used in this study.
 
 ## Required Data
 [1]	“Open Spatial Demographic Data and Research,” WorldPop. https://www.worldpop.org/ (accessed September 18, 2025).
-
-[2]	GADM, “Global Administrative Areas Boundaries.” https://gadm.org/download_world.html (accessed September 18, 2025).
-
-[3] Country metadata file. Contained in `/data/countries.csv`
