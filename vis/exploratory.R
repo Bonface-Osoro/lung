@@ -28,20 +28,20 @@ sex_plot <- ggplot(df1, aes(fileyear, sum, color = sex)) +
        x = "Years", y = bquote("Mortality counts")) + theme_minimal() +
   theme(
     legend.position = 'bottom',
-    plot.title = element_text(size = 9, face = "bold"),
-    plot.subtitle = element_text(size = 8),
-    axis.title.y = element_text(size = 7),
-    axis.title.x = element_text(size = 7),
+    plot.title = element_text(size = 8, face = "bold"),
+    plot.subtitle = element_text(size = 6),
+    axis.title.y = element_text(size = 5),
+    axis.title.x = element_text(size = 5),
     panel.border = element_blank(),
     panel.grid.major = element_blank(),
     panel.grid.minor = element_blank(),
-    axis.text.x = element_text(size = 6),
-    axis.text.y = element_text(size = 6),
+    axis.text.x = element_text(size = 5),
+    axis.text.y = element_text(size = 5),
     axis.line.x  = element_line(size = 0.15),
     axis.line.y  = element_line(size = 0.15),
-    legend.title = element_text(size = 8),
-    legend.text = element_text(size = 7),
-  ) + guides(color = guide_legend(nrow = 2, title = "Sex")) + 
+    legend.title = element_text(size = 6),
+    legend.text = element_text(size = 5)) + 
+  guides(color = guide_legend(nrow = 2, title = "Sex")) + 
   scale_y_continuous(expand = c(0, 0),
   labels = function(y) format(y, scientific = FALSE), limits = c(0, 5500)) +
   scale_x_continuous(expand = c(0, 0),
@@ -74,19 +74,19 @@ age_plot <- ggplot(df2, aes(fileyear, sum, color = age_cat)) +
        x = "Years", y = bquote("Mortality counts")) + theme_minimal() +
   theme(
     legend.position = 'bottom',
-    plot.title = element_text(size = 9, face = "bold"),
-    plot.subtitle = element_text(size = 8),
-    axis.title.y = element_text(size = 7),
-    axis.title.x = element_text(size = 7),
+    plot.title = element_text(size = 8, face = "bold"),
+    plot.subtitle = element_text(size = 6),
+    axis.title.y = element_text(size = 5),
+    axis.title.x = element_text(size = 5),
     panel.border = element_blank(),
     panel.grid.major = element_blank(),
     panel.grid.minor = element_blank(),
-    axis.text.x = element_text(size = 6),
-    axis.text.y = element_text(size = 6),
+    axis.text.x = element_text(size = 5),
+    axis.text.y = element_text(size = 5),
     axis.line.x  = element_line(size = 0.15),
     axis.line.y  = element_line(size = 0.15),
-    legend.title = element_text(size = 8),
-    legend.text = element_text(size = 7)) + 
+    legend.title = element_text(size = 6),
+    legend.text = element_text(size = 5))+ 
   guides(color = guide_legend(ncol = 2, title = "Age")) +
   scale_y_continuous(expand = c(0, 0),
      labels = function(y) format(y, scientific = FALSE), limits = c(0, 8000)) +
@@ -111,23 +111,23 @@ race_plot <- ggplot(df3, aes(fileyear, sum, color = race_recode3)) +
   geom_line(position = position_dodge(width = 0.5), size = 0.5) +
   scale_color_viridis_d(direction = -1) +
   labs(colour = NULL, title = "(C) Race",
-       subtitle = "Pulmonary embolism mortality \ncounts by racial groups across \nall US counties.",
+       subtitle = "Pulmonary embolism mortality counts by \nracial groups across all US counties.",
        x = "Years", y = bquote("Mortality counts")) + theme_minimal() +
   theme(
     legend.position = 'bottom',
-    plot.title = element_text(size = 9, face = "bold"),
-    plot.subtitle = element_text(size = 8),
-    axis.title.y = element_text(size = 7),
-    axis.title.x = element_text(size = 7),
+    plot.title = element_text(size = 8, face = "bold"),
+    plot.subtitle = element_text(size = 6),
+    axis.title.y = element_text(size = 5),
+    axis.title.x = element_text(size = 5),
     panel.border = element_blank(),
     panel.grid.major = element_blank(),
     panel.grid.minor = element_blank(),
-    axis.text.x = element_text(size = 6),
-    axis.text.y = element_text(size = 6),
+    axis.text.x = element_text(size = 5),
+    axis.text.y = element_text(size = 5),
     axis.line.x  = element_line(size = 0.15),
     axis.line.y  = element_line(size = 0.15),
-    legend.title = element_text(size = 8),
-    legend.text = element_text(size = 7)) + 
+    legend.title = element_text(size = 6),
+    legend.text = element_text(size = 5))+ 
   guides(color = guide_legend(nrow = 2, title = "Race")) +
   scale_y_continuous(expand = c(0, 0),
      labels = function(y) format(y, scientific = FALSE), limits = c(0, 8000)) +
@@ -199,31 +199,79 @@ chi_plot <- ggplot(df_plot2, aes(x = det_variable, y = value_plot, fill = det_va
        subtitle = "A Chi-square test for association of categorical variables (race, age \nand gender) across US counties.") +
   theme(
     legend.position = 'bottom',
-    plot.title = element_text(size = 9, face = "bold"),
-    plot.subtitle = element_text(size = 8),
-    axis.title.y = element_text(size = 7),
-    axis.title.x = element_text(size = 7),
+    plot.title = element_text(size = 8, face = "bold"),
+    plot.subtitle = element_text(size = 6),
+    axis.title.y = element_text(size = 5),
+    axis.title.x = element_text(size = 5),
     panel.border = element_blank(),
     panel.grid.major = element_blank(),
     panel.grid.minor = element_blank(),
-    axis.text.x = element_text(size = 6),
-    axis.text.y = element_text(size = 6),
+    axis.text.x = element_text(size = 5),
+    axis.text.y = element_text(size = 5),
     axis.line.x  = element_line(size = 0.15),
     axis.line.y  = element_line(size = 0.15),
-    legend.title = element_text(size = 8),
-    legend.text = element_text(size = 7)) +
+    legend.title = element_text(size = 6),
+    legend.text = element_text(size = 5),
+    strip.text = element_text(size = 6)) +
   scale_x_discrete(expand = c(0,0)) +
     scale_y_continuous(expand = c(0,0))
+
+#####################
+## AUTOCORRELATION ##
+#####################
+acf_df <- read.csv(file.path(folder, '..', 'results', 'stat_test', 
+                               'acf_raw_diff_lag5.csv'))
+acf_df <- acf_df %>%
+  filter(race != "Non-White/Black")
+
+acf_df <- acf_df %>%
+  filter(age_group != " 9 years or below")
+
+acf_df$sex <- factor(acf_df$sex,
+    levels = c('M', 'F'),
+    labels = c('Male', 'Female'))
+
+label_totals <- acf_df %>%
+  group_by(lag, sex, age_group, race) %>%
+  summarize(total_value = mean(acf_raw))
+
+auto_plots <- ggplot(acf_df, aes(x = lag, y = acf_raw, fill = sex)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  facet_wrap(~race + age_group, nrow = 1) + 
+  scale_fill_viridis_d(direction = -1) +
+  labs(title="(F) Autocorrelation Function (ACF)", 
+       subtitle = "Autocorrelation of US mortality counts from 2005-2022 grouped by race, age group and sex.", 
+       x = "Lag", y = "Autocorrelation value", fill = 'Sex') + theme_bw() +
+  theme(
+    legend.position = "bottom",
+    plot.title = element_text(size = 8, face = "bold"),
+    plot.subtitle = element_text(size = 6),
+    axis.title.y = element_text(size = 5),
+    axis.title.x = element_text(size = 5),
+    axis.text.x = element_text(size = 6),
+    axis.text.y = element_text(size = 6),
+    legend.title = element_text(size = 6),
+    legend.text = element_text(size = 5),
+    axis.ticks.y = element_line(linewidth = 0.1),
+    axis.ticks.x = element_line(linewidth = 0.1),
+    strip.text = element_text(size = 6))
+
 #################
 ## Panel Plots ##
 #################
-desc_plots <- 
-  (sex_plot + age_plot + plot_layout(widths = c(0.3, 0.7))) /
-  (race_plot + chi_plot + plot_layout(widths = c(0.30, 0.7))) +
-  plot_layout(heights = c(1, 1))
+desc_plots <- ggarrange(sex_plot, age_plot, ncol = 2, widths = c(0.3, 0.7))
+desc_bottom <- ggarrange(race_plot, chi_plot, ncol = 2, widths = c(0.3, 0.7))
+desc_plots <- ggarrange(desc_plots, desc_bottom, nrow = 2)
 
-path = file.path(folder, 'figures', 'descriptive_plots.png')
-png(path, units="in", width=6.6, height=7, res=300)
-print(desc_plots)
+combined_plots <- ggarrange(desc_plots, auto_plots,
+                            nrow = 2, heights = c(0.65, 0.35))
+
+path = file.path(folder, 'figures', 'auto_plots.png')
+png(path, units="in", width=6, height=7, res=300)
+print(combined_plots)
 dev.off()
+
+
+
+
 

@@ -21,9 +21,9 @@ Geospatial modeling method applied in the study(see `Figure 1`).
 Results
 =======
 `Figure 2` shows the exploratory results.
-#### Figure 2 Patient-facility distribution maps.
+#### Figure 2 Pulmonary embolism mortality count regression results across US counties.
 <p align="center">
-  <img src="/docs/facility_maps.png" />
+  <img src="/docs/significant_counties.png" />
 </p>
 
 ## Background and funding
