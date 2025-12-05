@@ -15,7 +15,7 @@ Geospatial modeling method applied in the study(see `Figure 1`).
 
 #### Figure 1 Proposed Method.
 <p align="center">
-  <img src="/docs/method.png" />
+  <img src="/doc/method.png" />
 </p>
 
 Results
@@ -23,7 +23,7 @@ Results
 `Figure 2` shows geographically weighted regression results.
 #### Figure 2 Pulmonary embolism mortality count regression results across US counties.
 <p align="center">
-  <img src="/docs/significant_counties.png" />
+  <img src="/doc/significant_counties.png" />
 </p>
 
 ## Background and funding
