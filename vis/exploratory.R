@@ -2,6 +2,7 @@ library(ggplot2)
 library(ggpubr)
 library(dplyr)
 library(RColorBrewer)
+library(gridExtra)
 
 suppressMessages(library(tidyverse))
 folder <- dirname(rstudioapi::getSourceEditorContext()$path)
@@ -266,11 +267,57 @@ desc_plots <- ggarrange(desc_plots, desc_bottom, nrow = 2)
 combined_plots <- ggarrange(desc_plots, auto_plots,
                             nrow = 2, heights = c(0.65, 0.35))
 
-path = file.path(folder, 'figures', 'auto_plots.png')
+path = file.path(folder, 'figures', 'descriptive_plots.png')
 png(path, units="in", width=6, height=7, res=300)
 print(combined_plots)
 dev.off()
 
+#################
+## Panel Plots ##
+#################
+explainables <- read_csv(file.path(folder, '..', 'results', 'final', 
+                                   'summary.csv'))
+models <- read_csv(file.path(folder, '..', 'results', 'final', 
+                                   'models.csv'))
+morans <- read_csv(file.path(folder, '..', 'results', 'final', 
+                             'morans.csv'))
+
+table_theme <- ttheme_default(core = list(
+    fg_params = list(fontfamily = "Times New Roman"),
+    bg_params = list(fill = c("white", "#f2f2f2"))),
+  colhead = list(
+    fg_params = list(fontfamily = "Times New Roman", fontface = "bold")))
+
+folder_tables <- file.path(folder, "figures")
+dir.create(folder_tables, showWarnings = FALSE)
+path <- file.path(folder_tables, "tables_combined.png")
+
+explainables_table <- tableGrob(explainables, rows = NULL, theme = table_theme)
+models_table <- tableGrob(models, rows = NULL, theme = table_theme)
+morans_table <- tableGrob(morans, rows = NULL, theme = table_theme)
+
+max_widths <- grid::unit.pmax(
+  explainables_table$widths,
+  models_table$widths,
+  morans_table$widths
+)
+
+explainables_table$widths <- max_widths
+models_table$widths <- max_widths
+morans_table$widths <- max_widths
+
+# ---- Save PNG ----
+png(filename = path, units = "in", width = 9.3, height = 6, res = 480)
+
+grid.arrange(
+  explainables_table,
+  models_table,
+  morans_table,
+  nrow = 3,
+  heights = c(1, 1, 1)
+)
+
+dev.off()
 
 
 
