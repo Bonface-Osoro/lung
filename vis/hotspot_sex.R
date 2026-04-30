@@ -63,23 +63,20 @@ male_gdf$gi_label <- factor(male_gdf$gi_label,
               'Cold Spot (99%)', 'Hot Spot (90%)', 'Hot Spot (95%)',
               'Hot Spot (99%)'))
 
-male_hotspot <- ggplot() + 
-geom_sf(data = usa_outline, linewidth = 0.2, fill = NA, color = "black") +
-  geom_sf(data = male_gdf, aes(fill = gi_label),  color = NA, linetype = 0,
-          inherit.aes = FALSE) +
+male_hotspot <- ggplot()  +
+  geom_sf(data = male_gdf, aes(fill = gi_label), linewidth = 0, colour   = NA) +
+  geom_sf(data = usa_outline, linewidth = 0.2, fill = NA, color = "black") +
   scale_fill_viridis_d(direction = 1, na.value = "grey98",
                        labels = function(x) ifelse(is.na(x), "No Data", x)) +
   labs(title = "(A) Male Hotspot Analysis Maps.",
        subtitle = "PE mortality count hotspot analysis before and after 2015 for continental US counties (excluding counties from Alaska and Hawaii).", 
        fill = "Hotspot") + theme_minimal() +
   theme(legend.position = 'bottom',
-        plot.margin = margin(0, 0, 0, 0),              
         plot.title = element_text(size = 9, face = "bold"),
         plot.subtitle = element_text(size = 8),
         axis.title.y = element_text(size = 7),
         axis.title.x = element_text(size = 7),
         panel.border = element_blank(),
-        panel.grid = element_blank(),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         axis.text.x = element_text(size = 6),
@@ -88,7 +85,6 @@ geom_sf(data = usa_outline, linewidth = 0.2, fill = NA, color = "black") +
         axis.line.y  = element_line(size = 0.15),
         legend.title = element_text(size = 8),
         legend.text = element_text(size = 7)) +
-  coord_sf(expand = FALSE) +
   guides(fill = guide_legend(ncol = 8)) +
   facet_wrap( ~ epoch, ncol = 2)
 
@@ -171,30 +167,32 @@ male_pre_10 <- male_pre_hot %>%
   arrange(desc(totals)) %>%  # 
   slice_head(n = 10) 
 
-state_population_2015 <- data.frame(
+county_no <- data.frame(
   STATEABBRV = c("TX","KS","MO","MS","AR","OK","NE","LA","TN","CO"),
-  population_2015 = c(27429639, 2911641, 6083672, 2988474, 2977853, 3911338,
+  counties = c(27429639, 2911641, 6083672, 2988474, 2977853, 3911338,
     1896190, 4670724, 6600299, 5456574))
 
 male_pre_10 <- male_pre_10 %>%
-  left_join(state_population_2015, by = "STATEABBRV")
+  left_join(county_no, by = "STATEABBRV")
 
 male_pre_10 <- male_pre_10 %>%
-  mutate(per_100k = (totals / population_2015)*100000)
+  mutate(perc = (totals / counties)*100)
 
 male_pre_10$STATEABBRV <- factor(male_pre_10$STATEABBRV,
    levels = c('CO', 'TN', 'TX', 'LA', 'MO', 'OK', 'AR', 'MS', 'NE', 'KS'),
    labels = c('Colorado', 'Tennessee', 'Texas', 'Louisiana', 'Missouri',
               'Oklahoma', 'Arkansas', 'Mississippi', 'Nebraska', 'Kansas'))
 
-male_pre_top10 <- ggplot(male_pre_10, aes(x = STATEABBRV, y = per_100k, fill = STATEABBRV)) +
+male_pre_top10 <- ggplot(male_pre_10, aes(x = STATEABBRV, y = perc, fill = STATEABBRV)) +
   geom_col(show.legend = FALSE) + coord_flip() +
   scale_fill_viridis_d(direction = 1) + theme_minimal() +
   labs(x = NULL,
-       y = "Counts per 100,000 people",
+       y = "Percentage of Counties (%)",
        title = "(C) Top 10 hotspot States where PE mortality counts are highest.",
        subtitle = "Male 2005 to 2015") +
-  geom_text(aes(label = sprintf("%.1f", per_100k)), size = 2, hjust = -0.1) +
+  geom_text(data = post_top10_gen, aes(x = STATEABBRV, y = perc, 
+       label = sprintf("%.0f%%", perc)), size = 2,
+      position = position_dodge(0.9), vjust = 0.5, hjust = -0.1) +
   theme(
     legend.position = 'none',
     plot.margin = margin(t = 0, b = 0, l = 5, r = 5),
@@ -213,7 +211,7 @@ male_pre_top10 <- ggplot(male_pre_10, aes(x = STATEABBRV, y = per_100k, fill = S
     legend.text = element_text(size = 7)) +
   scale_x_discrete(expand = c(0, 0.15)) + 
   scale_y_continuous(expand = c(0, 0),
-  labels = function(y)format(y, scientific = FALSE), limit = c(0, 3.5))
+  labels = function(y)format(y, scientific = FALSE), limit = c(0, 110))
 
 ################################
 ## 4. Male Hotspots post-2015 ##

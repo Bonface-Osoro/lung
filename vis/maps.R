@@ -11,6 +11,7 @@ library(gridExtra)
 library(readxl)
 library(haven)
 library(ggpubr)
+library(sf)
 
 suppressMessages(library(tidyverse))
 folder <- dirname(rstudioapi::getSourceEditorContext()$path)
@@ -18,7 +19,7 @@ folder <- dirname(rstudioapi::getSourceEditorContext()$path)
 ## REGRESSION MAPS ##
 #####################
 reg_data <- st_read(file.path(folder, '..', 'results', 'final', 'coefficients',
-                              'counties_coefficients.shp'))
+                              'coefficients.shp'))
 
 #######################
 ## COEFFICIENT PLOTS ##
@@ -101,9 +102,10 @@ age_df <- age_df %>%
   slice_head(n = 8)
 
 county_counts <- data.frame(
-  STATE = c("Texas","Missouri","Kansas","Kentucky","Illinois","Virginia",
-            "Tennessee","Mississippi"),
-  counties = c(254, 115, 105, 120, 102, 133, 95, 82))
+  STATE = c("Texas","Virginia","Kansas","West Virginia",
+            "South Dakota","Nebraska","Tennessee","Pennsylvania"),
+  counties = c(254, 95, 105, 55, 66, 93, 95, 67)
+)
 
 age_df <- age_df %>%
   left_join(county_counts, by = "STATE")
@@ -116,10 +118,10 @@ label_totals <- age_df %>%
   summarize(total_value = sum(perc))
 
 age_df$STATE <- factor(age_df$STATE,
-    levels = c('Virginia', 'Texas', 'Kentucky', 'Illinois', 'Tennessee', 
-               'Missouri', 'Kansas', 'Mississippi'),
-    labels = c('Virginia', 'Texas', 'Kentucky', 'Illinois', 'Tennessee', 
-               'Missouri', 'Kansas', 'Mississippi'))
+    levels = c('Tennessee', 'Nebraska', 'Kansas', 'Pennsylvania', 
+               'South Dakota', 'West Virginia', 'Texas', 'Virginia'),
+    labels = c('Tennessee', 'Nebraska', 'Kansas', 'Pennsylvania', 
+               'S.Dakota', 'W.Virginia', 'Texas', 'Virginia'))
 
 age_plot <- ggplot(age_df, aes(x = STATE, y = perc, fill = STATE)) +
   geom_col(show.legend = FALSE) + coord_flip() +
@@ -128,9 +130,8 @@ age_plot <- ggplot(age_df, aes(x = STATE, y = perc, fill = STATE)) +
        y = "Percentage of Counties (%)",
        title = "(B) Top 8 States where Independent Varibales are Statistically Significant",
        subtitle = "Age") +
-  geom_text(data = label_totals, aes(x = STATE, y = total_value, 
-      label = sprintf("%.1f%%", total_value)), size = 2,
-      position = position_dodge(0.9), vjust = 0.5, hjust = -0.1) +
+  geom_text(aes(label = paste0(round(perc), "%")), 
+            vjust = 0.5, hjust = -0.1, size = 2) +
   theme(
     legend.position = 'bottom',
     plot.margin = margin(t = 0, b = 0, l = 5, r = 5),
@@ -148,7 +149,7 @@ age_plot <- ggplot(age_df, aes(x = STATE, y = perc, fill = STATE)) +
     legend.title = element_text(size = 8),
     legend.text = element_text(size = 7)) +
   scale_x_discrete(expand = c(0, 0.15)) + scale_y_continuous(expand = c(0, 0),
-  labels = function(y)format(y, scientific = FALSE), limit = c(0, 124))
+  labels = function(y)format(y, scientific = FALSE), limit = c(0, 99))
 
 ##########################
 ## 2. Significant PM2.5 ##
@@ -165,10 +166,15 @@ pm_df <- pm_df %>%
   group_by(STATE) %>%
   summarise(totals = sum(S_SG_PM25_, na.rm = TRUE))
 
+pm_df <- pm_df %>%
+  arrange(desc(totals)) %>%
+  slice_head(n = 8)
+
 pm_county_counts <- data.frame(
-  STATE = c("Georgia", "Kansas", "Maryland", "Nebraska", "North Carolina",
-            "Texas", "Virginia", "West Virginia" ),
-  counties = c(159, 105, 24, 93, 100, 254, 133, 55))
+  STATE = c("Oklahoma","West Virginia","Maryland", "Arkansas","Louisiana",
+            "North Carolina","Texas","Virginia"),
+  counties = c(77, 55, 23, 75, 64, 100, 254, 95)
+)
 
 pm_df <- pm_df %>%
   left_join(pm_county_counts, by = "STATE")
@@ -177,15 +183,14 @@ pm_df <- pm_df %>%
   mutate(perc = (totals / counties)*100)
 
 pm_df$STATE <- factor(pm_df$STATE,
-    levels = c('Georgia', 'West Virginia', 'Texas', 'Kansas', 'Nebraska',
-               'North Carolina', 'Virginia', 'Maryland'),
-    labels = c('Georgia', 'W. Virginia', 'Texas', 'Kansas', 'Nebraska',
-               'N. Carolina', 'Virginia', 'Maryland'))
+    levels = c('Oklahoma', 'West Virginia', 'Texas', 'Arkansas', 'Louisiana',
+               'North Carolina', 'Maryland', 'Virginia'),
+    labels = c('Oklahoma', 'W.Virginia', 'Texas', 'Arkansas', 'Louisiana',
+               'N.Carolina', 'Maryland', 'Virginia'))
 
 label_totals <- pm_df %>%
   group_by(STATE) %>%
   summarize(total_value = mean(perc))
-
 
 pm_plot <- ggplot(pm_df, aes(x = STATE, y = perc, fill = STATE)) +
   geom_col(show.legend = FALSE) + coord_flip() +
@@ -214,7 +219,7 @@ pm_plot <- ggplot(pm_df, aes(x = STATE, y = perc, fill = STATE)) +
     legend.title = element_text(size = 8),
     legend.text = element_text(size = 7)) +
   scale_x_discrete(expand = c(0, 0.15)) + scale_y_continuous(expand = c(0, 0),
- labels = function(y)format(y, scientific = FALSE), limit = c(0, 39))
+ labels = function(y)format(y, scientific = FALSE), limit = c(0, 79))
 
 ################################
 ## 3. Significant Walkability ##
@@ -231,10 +236,14 @@ wk_df <- wk_df %>%
   group_by(STATE) %>%
   summarise(totals = sum(S_SG_WALKA, na.rm = TRUE))
 
+wk_df <- wk_df %>%
+  arrange(desc(totals)) %>%
+  slice_head(n = 8)
+
 wk_county_counts <- data.frame(
-  STATE = c("Colorado","Georgia", "Kansas", "Maryland", "Nebraska",
-            "Texas", "Virginia", "West Virginia"),
-  counties = c(64, 159, 105, 24, 93, 254, 133, 55))
+  STATE = c("Texas","Virginia","Kansas","Maryland",
+            "South Dakota","Nebraska","Pennsylvania","West Virginia"),
+  counties = c(254, 95, 105, 23, 66, 93, 67, 55))
 
 wk_df <- wk_df %>%
   left_join(wk_county_counts, by = "STATE")
@@ -243,10 +252,10 @@ wk_df <- wk_df %>%
   mutate(perc = (totals / counties)*100)
 
 wk_df$STATE <- factor(wk_df$STATE,
-    levels = c('Georgia', 'West Virginia', 'Texas', 'Colorado', 'Virginia',  
-               'Nebraska', 'Maryland', 'Kansas'),
-    labels = c('Georgia', 'W. Virginia', 'Texas', 'Colorado', 'Virginia',  
-               'Nebraska', 'Maryland', 'Kansas'))
+    levels = c('West Virginia', 'Nebraska', 'Pennsylvania', 'South Dakota', 
+               'Texas', 'Kansas', 'Virginia', 'Maryland'),
+    labels = c('W.Virginia', 'Nebraska', 'Pennsylvania', 'S.Dakota', 
+               'Texas', 'Kansas', 'Virginia', 'Maryland'))
 
 label_totals <- wk_df %>%
   group_by(STATE) %>%
@@ -279,7 +288,7 @@ wk_plot <- ggplot(wk_df, aes(x = STATE, y = perc, fill = STATE)) +
     legend.title = element_text(size = 8),
     legend.text = element_text(size = 7)) +
   scale_x_discrete(expand = c(0, 0.15)) + scale_y_continuous(expand = c(0, 0),
-     labels = function(y)format(y, scientific = FALSE), limit = c(0, 51))
+     labels = function(y)format(y, scientific = FALSE), limit = c(0, 109))
 
 ############################
 ## 4. Significant Poverty ##
@@ -295,10 +304,14 @@ pv_df <- pv_df %>%
   group_by(STATE) %>%
   summarise(totals = sum(S_SG_POVER, na.rm = TRUE))
 
+pv_df <- pv_df %>%
+  arrange(desc(totals)) %>%
+  slice_head(n = 8)
+
 pv_county_counts <- data.frame(
-  STATE = c("Colorado", "Georgia", "Maryland", "Nebraska",  "North Carolina",
-            "South Dakota", "Texas", "Virginia"),
-  counties = c(64, 159, 24, 93, 100, 66, 254, 133))
+  STATE = c("Virginia","Texas","Maryland","Nebraska",
+            "Pennsylvania","West Virginia","South Dakota"),
+  counties = c(95, 254, 23, 93, 67, 55, 66))
 
 pv_df <- pv_df %>%
   left_join(pv_county_counts, by = "STATE")
@@ -307,10 +320,10 @@ pv_df <- pv_df %>%
   mutate(perc = (totals / counties)*100)
 
 pv_df$STATE <- factor(pv_df$STATE,
-    levels = c('Georgia', 'South Dakota', 'Virginia', 'Colorado', 
-               'North Carolina', 'Texas', 'Nebraska', 'Maryland'),
-    labels = c('Georgia', 'S. Dakota', 'Virginia', 'Colorado', 
-               'N. Carolina', 'Texas', 'Nebraska', 'Maryland'))
+    levels = c('South Dakota', 'Texas', 'West Virginia', 
+               'Nebraska', 'Pennsylvania', 'Virginia', 'Maryland'),
+    labels = c('S.Dakota', 'Texas', 'W.Virginia', 'Nebraska', 'Pennsylvania', 
+               'Virginia', 'Maryland'))
 
 label_totals <- pv_df %>%
   group_by(STATE) %>%
@@ -343,7 +356,7 @@ pv_plot <- ggplot(pv_df, aes(x = STATE, y = perc, fill = STATE)) +
     legend.title = element_text(size = 8),
     legend.text = element_text(size = 7)) +
   scale_x_discrete(expand = c(0, 0.15)) + scale_y_continuous(expand = c(0, 0),
-     labels = function(y)format(y, scientific = FALSE), limit = c(0, 34))
+     labels = function(y)format(y, scientific = FALSE), limit = c(0, 99))
 
 significant_plots <- ggarrange(age_plot, pm_plot, wk_plot, 
                                pv_plot, ncol = 4,

@@ -100,30 +100,31 @@ top10_gen <- gen_hot99 %>%
   arrange(desc(totals)) %>%  # 
   slice_head(n = 10) 
 
-state_population_2015 <- data.frame(
+county_no <- data.frame(
   STATEABBRV = c("TX","MO","KS","NE","MS","AR","OK","TN","LA","IL"),
-  population_2015 = c(27429639, 6083672, 2911641, 1896190, 2988474,
-    2977853, 3911338, 6600299, 4670724, 12859995))
+  counties = c(254, 114, 105, 93, 82, 76, 77, 95, 64, 102))
 
 top10_gen <- top10_gen %>%
-  left_join(state_population_2015, by = "STATEABBRV")
+  left_join(county_no, by = "STATEABBRV")
 
 top10_gen <- top10_gen %>%
-  mutate(per_100k = (totals / population_2015)*100000)
+  mutate(perc = (totals / counties)*100)
 
 top10_gen$STATEABBRV <- factor(top10_gen$STATEABBRV,
-  levels = c('IL', 'TX', 'TN', 'LA', 'MO', 'OK', 'AR', 'MS', 'KS', 'NE'),
-  labels = c('Illinois', 'Texas', 'Tennessee', 'Louisiana', 'Missouri',
-             'Oklahoma', 'Arkansas', 'Mississippi', 'Kansas', 'Nebraska'))
+  levels = c('IL', 'TX', 'TN', 'NE', 'LA', 'OK', 'MS', 'KS', 'MO', 'AR'),
+  labels = c('Illinois', 'Texas', 'Tennessee', 'Nebraska', 'Louisiana', 
+             'Oklahoma', 'Mississippi', 'Kansas', 'Missouri', 'Arkansas'))
 
-pre_2015_top10 <- ggplot(top10_gen, aes(x = STATEABBRV, y = per_100k, fill = STATEABBRV)) +
+pre_2015_top10 <- ggplot(top10_gen, aes(x = STATEABBRV, y = perc, fill = STATEABBRV)) +
   geom_col(show.legend = FALSE) + coord_flip() +
   scale_fill_viridis_d(direction = 1) + theme_minimal() +
   labs(x = NULL,
-       y = "Counts per 100,000 people",
+       y = "Percentage of Counties (%)",
        title = "(B) Top 10 hotspot States where PE mortality counts are highest.",
        subtitle = "2005 to 2015") +
-geom_text(aes(label = sprintf("%.1f", per_100k)), size = 2, hjust = -0.1) +
+  geom_text(data = top10_gen, aes(x = STATEABBRV, y = perc, 
+       label = sprintf("%.0f%%", perc)), size = 2,
+      position = position_dodge(0.9), vjust = 0.5, hjust = -0.1) +
   theme(
     legend.position = 'bottom',
     plot.margin = margin(t = 0, b = 0, l = 5, r = 5),
@@ -142,7 +143,7 @@ geom_text(aes(label = sprintf("%.1f", per_100k)), size = 2, hjust = -0.1) +
     legend.text = element_text(size = 7)) +
   scale_x_discrete(expand = c(0, 0.15)) + 
   scale_y_continuous(expand = c(0, 0),
-  labels = function(y)format(y, scientific = FALSE), limit = c(0, 5))
+  labels = function(y)format(y, scientific = FALSE), limit = c(0, 110))
 
 ###########################
 ## 2. Hotspots post-2015 ##
@@ -159,30 +160,31 @@ post_top10_gen <- gen_post_hot99 %>%
   arrange(desc(totals)) %>%  # 
   slice_head(n = 10)
 
-state_population <- data.frame(
+county_no <- data.frame(
   STATEABBRV = c("AL","AR","GA","KY","LA","MO","MS","OK","TN","TX"),
-  population_2023 = c(5097641, 3040207, 11029227, 4512310, 4590241, 6177957,
-                      2940057, 4053824, 7126489, 30503301))
+  counties = c(67, 76, 159, 120, 64, 115, 82, 77, 95, 254))
 
 post_top10_gen <- post_top10_gen %>%
-  left_join(state_population, by = "STATEABBRV")
+  left_join(county_no, by = "STATEABBRV")
 
 post_top10_gen <- post_top10_gen %>%
-  mutate(per_100k = (totals / population_2023)*100000)
+  mutate(perc = (totals / counties)*100)
 
 post_top10_gen$STATEABBRV <- factor(post_top10_gen$STATEABBRV,
-   levels = c('TX', 'GA', 'MO', 'TN', 'AL', 'KY', 'LA', 'OK', 'AR', 'MS'),
-   labels = c('Texas', 'Georgia', 'Missouri', 'Tennessee', 'Alabama', 'Kentucky',
-              'Louisiana', 'Oklahoma', 'Arkansas', 'Mississippi' ))
+  levels = c('TX', 'KY', 'MO', 'GA', 'OK', 'TN', 'LA', 'AL', 'MS', 'AR'),
+  labels = c('Texas', 'Kentucky', 'Missouri', 'Georgia', 'Oklahoma', 
+             'Tennessee', 'Louisiana', 'Alabama', 'Mississippi', 'Arkansas'))
 
-post_2015_top10 <- ggplot(post_top10_gen, aes(x = STATEABBRV, y = per_100k, fill = STATEABBRV)) +
+post_2015_top10 <- ggplot(post_top10_gen, aes(x = STATEABBRV, y = perc, fill = STATEABBRV)) +
   geom_col(show.legend = FALSE) + coord_flip() +
   scale_fill_viridis_d(direction = 1) + theme_minimal() +
   labs(x = NULL,
-       y = "Counts per 100,000 people",
+       y = "Percentage of Counties (%)",
        title = " ",
        subtitle = "2016 to 2022") +
-  geom_text(aes(label = sprintf("%.1f", per_100k)), size = 2, hjust = -0.1) +
+  geom_text(data = post_top10_gen, aes(x = STATEABBRV, y = perc, 
+       label = sprintf("%.0f%%", perc)), size = 2,
+      position = position_dodge(0.9), vjust = 0.5, hjust = -0.1) +
   theme(legend.position = 'bottom',
     plot.margin = margin(t = 0, b = 0, l = 5, r = 5),
     plot.title = element_text(size = 9, face = "bold"),
@@ -200,7 +202,7 @@ post_2015_top10 <- ggplot(post_top10_gen, aes(x = STATEABBRV, y = per_100k, fill
     legend.text = element_text(size = 7)) +
   scale_x_discrete(expand = c(0, 0.15)) + 
   scale_y_continuous(expand = c(0, 0),
-  labels = function(y)format(y, scientific = FALSE), limit = c(0, 3.2))
+  labels = function(y)format(y, scientific = FALSE), limit = c(0, 110))
 
 significant_plots <- ggarrange(pre_2015_top10, post_2015_top10, ncol = 2,
                                nrow = 1, heights = c(1, 1))

@@ -64,8 +64,8 @@ df2 <- df2 %>%
 
 
 df2$age_cat <- factor(df2$age_cat,
-    levels = c('10 - 29 years', '30 - 49 years', '70 years or above'),
-    labels = c('10 - 29 Years', '30 - 49 Years', 'Above 70 Years'))
+    levels = c('10 - 29 years', '30 - 49 years', '50 - 69 years', '70 years or above'),
+    labels = c('10 - 29 Years', '30 - 49 Years', '50 - 69 Years', 'Above 70 Years'))
 
 age_plot <- ggplot(df2, aes(fileyear, sum, color = age_cat)) + 
   geom_line(position = position_dodge(width = 0.5), size = 0.5) +
@@ -232,6 +232,14 @@ acf_df$sex <- factor(acf_df$sex,
     levels = c('M', 'F'),
     labels = c('Male', 'Female'))
 
+print(unique(acf_df$age_group))
+
+acf_df$age_group <- factor(acf_df$age_group,
+   levels = c('10 - 29 years', '30 - 49 years', '50 - 69 years',
+              '70 years or above'),
+   labels = c('10 - 29 years', '30 - 49 years', '50 - 69 years',
+              '70 years/above'))
+
 label_totals <- acf_df %>%
   group_by(lag, sex, age_group, race) %>%
   summarize(total_value = mean(acf_raw))
@@ -240,7 +248,7 @@ auto_plots <- ggplot(acf_df, aes(x = lag, y = acf_raw, fill = sex)) +
   geom_bar(stat = "identity", position = "dodge") +
   facet_wrap(~race + age_group, nrow = 1) + 
   scale_fill_viridis_d(direction = -1) +
-  labs(title="(F) Autocorrelation Function (ACF)", 
+  labs(title="(E) Autocorrelation Function (ACF)", 
        subtitle = "Autocorrelation of US mortality counts from 2005-2022 grouped by race, age group and sex.", 
        x = "Lag", y = "Autocorrelation value", fill = 'Sex') + theme_bw() +
   theme(
