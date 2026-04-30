@@ -37,3 +37,5 @@ authorities for providing the data used in this study.
 
 ## Required Data
 [1]	“Open Spatial Demographic Data and Research,” WorldPop. https://www.worldpop.org/ (accessed September 18, 2025).
+
+[2] Center for Diseases and Prevention Control
