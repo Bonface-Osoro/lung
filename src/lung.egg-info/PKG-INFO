@@ -1,6 +1,6 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: lung
-Version: 0.1.dev7+g20f523300.d20251017
+Version: 0.1.dev19+g2bb1c4c53.d20260511
 Summary: Local-US Neighborhood Geographies of Pulmonary Embolism (lung)
 Home-page: https://github.com/Bonface-Osoro/lung.git
 Author: Bonface Osoro
@@ -16,6 +16,18 @@ Classifier: Topic :: Scientific/Healthcare :: Geospatial data science
 Classifier: Topic :: Utilities
 Description-Content-Type: text/markdown
 License-File: LICENSE
+Requires-Dist: numpy>=1.16.4
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: keywords
+Dynamic: license
+Dynamic: license-file
+Dynamic: requires-dist
+Dynamic: summary
 
 # Local-US Neighborhood Geographies of Pulmonary Embolism (lung)
 Lung is a county-level exploratory data project focused on understanding pulmonary embolism (PE) mortality trends across the United States from 2005 to 2022. We use the Center for Diseases and Control (CDC) data By combined with spatial analysis and local indicators such as air pollution, socioeconomic conditions, and walkability and understand the patterns of the conditions. Through this project, we aim to uncover geographic patterns and community level factors that shape disparities in PE outcomes. **lung** provides an open framework for integrating diverse datasets, visualizing risk landscapes, and generating insights to inform both public health research and policy interventions.
@@ -34,15 +46,15 @@ Geospatial modeling method applied in the study(see `Figure 1`).
 
 #### Figure 1 Proposed Method.
 <p align="center">
-  <img src="/docs/method.png" />
+  <img src="/doc/method.png" />
 </p>
 
 Results
 =======
-`Figure 2` shows the exploratory results.
-#### Figure 2 Patient-facility distribution maps.
+`Figure 2` shows geographically weighted regression results.
+#### Figure 2 Pulmonary embolism mortality count regression results across US counties.
 <p align="center">
-  <img src="/docs/facility_maps.png" />
+  <img src="/doc/significant_counties.png" />
 </p>
 
 ## Background and funding
@@ -57,6 +69,4 @@ authorities for providing the data used in this study.
 ## Required Data
 [1]	“Open Spatial Demographic Data and Research,” WorldPop. https://www.worldpop.org/ (accessed September 18, 2025).
 
-[2]	GADM, “Global Administrative Areas Boundaries.” https://gadm.org/download_world.html (accessed September 18, 2025).
-
-[3] Country metadata file. Contained in `/data/countries.csv`
+[2] Center for Diseases and Prevention Control

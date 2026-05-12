@@ -75,11 +75,19 @@ setup.py
 .eggs/setuptools_scm-9.2.0-py3.11.egg/setuptools_scm/_integration/__pycache__/toml.cpython-311.pyc
 .eggs/setuptools_scm-9.2.0-py3.11.egg/setuptools_scm/_integration/__pycache__/version_inference.cpython-311.pyc
 dist/lung-0.1.dev2+g979642b93.d20251001-py3.11.egg
+doc/significant_counties.png
 scripts/.DS_Store
+scripts/GWR Data Prep.ipynb
+scripts/GWR_All.ipynb
+scripts/Time_series_analysis.ipynb
+scripts/air_quality_data.ipynb
 scripts/data_preparation.ipynb
+scripts/hotspot_data.ipynb
 scripts/script_config.ini
+scripts/statistical_test.ipynb
 scripts/.ipynb_checkpoints/data_preparation-checkpoint.ipynb
 src/.DS_Store
+src/preprocess.py
 src/lung/script_config.ini
 src/lung.egg-info/PKG-INFO
 src/lung.egg-info/SOURCES.txt
@@ -87,4 +95,9 @@ src/lung.egg-info/dependency_links.txt
 src/lung.egg-info/not-zip-safe
 src/lung.egg-info/requires.txt
 src/lung.egg-info/top_level.txt
+vis/.RData
+vis/.Rhistory
 vis/exploratory.R
+vis/hotspot.R
+vis/hotspot_sex.R
+vis/maps.R
