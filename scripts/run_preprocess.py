@@ -33,7 +33,17 @@ pm25_2010_path = os.path.join(DATA_RAW, 'counties_pm25_2010.csv')
 pm25_2017_path = os.path.join(DATA_RAW, 'counties_pm25_2017.csv')
 pm25_2022_path = os.path.join(DATA_RAW, 'counties_pm25_2022.csv') 
 mortality_output = os.path.join(DATA_PROCESSED, 'mortality_with_pm25.csv')
- 
+
+###### CDC HEALTH MEASURES PREPROCESSING ######
+health_measures_path = os.path.join(DATA_RAW, 'cdc_places_county_all_epochs.csv')
+mort_pm25_path = os.path.join(DATA_PROCESSED, 'mortality_with_pm25.csv')
+health_measures_output = os.path.join(DATA_PROCESSED, 'mort_pm25_health_measures.csv')
+
+###### SOCIECONOMIC PREPROCESSING ######
+mort_health_pm25_path = os.path.join(DATA_PROCESSED, 'mort_pm25_health_measures.csv')
+socioeconomic_path = os.path.join(DATA_RAW, 'socioeconomic.csv')
+mort_pm25_health_socio_output = os.path.join(DATA_PROCESSED, 'mort_pm25_health_socio.csv')
+
 if __name__ == "__main__":
     '''result = aggregate_by_epoch(data_path   = all_data,
         epochs      = [(2005, 2010), (2011, 2017), (2018, 2022)],
@@ -41,6 +51,8 @@ if __name__ == "__main__":
     attach_population(input_data, census_2010, census_2017, census_2020, output_path)
     aggregate_mortality(mort_path,
         strata = ["sex", "race_recode3", "age_cat"], output_dir = mort_out
-    )'''
+    )
     attach_pm25(mortality_path, pm25_2010_path, pm25_2017_path, pm25_2022_path, mortality_output)
+    attach_places(mort_pm25_path, health_measures_path, health_measures_output)'''
+    attach_socioeconomic(mort_health_pm25_path, socioeconomic_path, mort_pm25_health_socio_output)
  

@@ -417,3 +417,154 @@ def attach_pm25(mortality_path, pm25_2010_path,
         print(f'\n✓ Saved -> {output_path}  ({size_mb:.2f} MB)')
  
     return mort
+
+
+def _normalise_fips(series):
+    
+    """
+    This is a helper function to convert any FIPS 
+    representation to a zero-padded 5-character string.
+    """
+    return (
+        series
+        .fillna(-1)
+        .astype(float)
+        .astype(int)
+        .astype(str)
+        .str.zfill(5)
+    )
+ 
+
+def attach_places(mortality_path, places_path,
+    output_path):
+
+    """
+    This function is designed to join CDC PLACES health behaviour measures
+    onto a mortality dataset.
+
+    Parameters
+    ----------
+    mortality_path : str
+        Path to the mortality dataset CSV file.
+    places_path : str
+        Path to the CDC PLACES dataset CSV file.
+    output_path : str | None, optional
+        Path to save the merged dataset CSV file.
+
+    Returns
+    -------
+    pd.DataFrame
+        Merged dataset with all mortality columns + 8 PLACES measure columns.
+    """
+
+    PLACES_COLS = ['CSMOKING_CrudePrev', 'OBESITY_CrudePrev',
+        'LPA_CrudePrev', 'DIABETES_CrudePrev', 'BPHIGH_CrudePrev',
+        'CHD_CrudePrev', 'COPD_CrudePrev', 'ACCESS2_CrudePrev']
+    
+    mort   = pd.read_csv(mortality_path, low_memory=False)
+    places = pd.read_csv(places_path,    low_memory=False)
+
+    for col in ('fips', 'epoch'):
+
+        if col not in mort.columns:
+
+            raise ValueError(f"mortality file must contain a '{col}' column")
+    if 'CountyFIPS' not in places.columns:
+
+        raise ValueError("PLACES file must contain a 'CountyFIPS' column")
+    if 'epoch' not in places.columns:
+
+        raise ValueError("PLACES file must contain an 'epoch' column")
+    missing_measures = [c for c in PLACES_COLS if c not in places.columns]
+    if missing_measures:
+
+        raise ValueError(f'PLACES file missing columns: {missing_measures}')
+ 
+    mort   = mort.copy()
+    places = places.copy()
+    mort['fips_key']   = _normalise_fips(mort['fips'])
+    places['fips_key'] = _normalise_fips(places['CountyFIPS'])
+ 
+    lookup = (
+        places[['fips_key', 'epoch'] + PLACES_COLS]
+        .drop_duplicates(subset=['fips_key', 'epoch']))
+
+    merged = mort.merge(lookup, on=['fips_key', 'epoch'], how='left')
+    merged = merged.drop(columns=['fips_key'])
+ 
+    if output_path:
+        merged.to_csv(output_path, index=False)
+        size_mb = os.path.getsize(output_path) / 1024 / 1024
+        print(f'\n✓ Saved -> {output_path}  ({size_mb:.2f} MB)')
+ 
+    return merged
+
+
+def attach_socioeconomic(mortality_path,
+    socioeconomic_path, output_path):
+    """
+    This is a function to join socioeconomic measures (e.g. unemployment_rate, rucc_code)
+    onto a mortality dataset, by matching on county FIPS + epoch.
+
+    Parameters
+    ----------
+    mortality_path : str
+        Path to the mortality dataset CSV file.
+    socioeconomic_path : str
+        Path to the socioeconomic dataset CSV file.
+    output_path : str
+        Path to save the merged dataset CSV file.
+
+    Returns
+    -------
+    pd.DataFrame
+        Merged dataset with all mortality columns + socioeconomic columns.
+    """
+
+    SOCIO_COLS = ['unemployment_rate', 'rucc_code']
+    mort  = pd.read_csv(mortality_path, low_memory = False)
+    socio = pd.read_csv(socioeconomic_path, low_memory = False)
+ 
+    for col in ('fips', 'epoch'):
+
+        if col not in mort.columns:
+
+            raise ValueError(f"mortality file must contain a '{col}' column")
+        if col not in socio.columns:
+
+            raise ValueError(f"socioeconomic file must contain a '{col}' column")
+    missing = [c for c in SOCIO_COLS if c not in socio.columns]
+    if missing:
+
+        raise ValueError(f'socioeconomic file missing columns: {missing}')
+ 
+    mort  = mort.copy()
+    socio = socio.copy()
+    mort['fips_key']  = _normalise_fips(mort['fips'])
+    socio['fips_key'] = _normalise_fips(socio['fips'])
+
+    lookup = (
+        socio[['fips_key', 'epoch'] + SOCIO_COLS]
+        .drop_duplicates(subset = ['fips_key', 'epoch']))
+ 
+    merged = mort.merge(lookup, on = ['fips_key', 'epoch'], 
+                        how = 'left')
+    merged = merged.drop(columns = ['fips_key'])
+    merged['mortality_per_100k'] = (merged['total_mort_count'] / 
+                                    merged['population'] * 100000)
+    
+    age_map = {
+        '10 - 29 years'     : 1,
+        '30 - 49 years'     : 2,
+        '50 - 69 years'     : 3,
+        '70 years or above' : 4,
+    }
+    merged['encoded_age'] = merged['age_cat'].map(age_map)
+    
+    if output_path:
+
+        merged.to_csv(output_path, index=False)
+        size_mb = os.path.getsize(output_path) / 1024 / 1024
+        print(f'\n✓ Saved -> {output_path}  ({size_mb:.2f} MB)')
+ 
+    return merged
